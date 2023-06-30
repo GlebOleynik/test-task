@@ -8,13 +8,10 @@ use Goleynik\WordsDeclension\Alt\Declination;
 use Goleynik\WordsDeclension\Alt\DeclinedWord;
 use Goleynik\WordsDeclension\Alt\Rule;
 use Goleynik\WordsDeclension\Alt\Gender;
-use Goleynik\WordsDeclension\Refference\Letters;
 use Goleynik\WordsDeclension\Alt\Type;
 
 final readonly class Rule17 implements Rule
 {
-    public const ENDING = 'а';
-
     public function supportedGenders(): array
     {
         return [Gender::MALE];
@@ -25,23 +22,19 @@ final readonly class Rule17 implements Rule
         return [Type::NAME];
     }
 
-    public function supportsWord(string $word): bool
+    public function tryDecline(string $word): ?DeclinedWord
     {
-        return $word[-1] === self::ENDING
-            && in_array($word[-2] ?? '', Letters::CONSONANTS, true);
-    }
-
-    public function decline(string $word): DeclinedWord
-    {
-        $wordWithoutEnding = mb_substr($word, 0, -1);
+        if (preg_match('/(.*[бвгджзйклмнпрстфхцчшщ])а$/', $word, $matches) !== 1) {
+            return null;
+        }
 
         return DeclinedWord::fromPairs([
             [Declination::NOMINATIVE, $word],
-            [Declination::GENITIVE, $wordWithoutEnding.'ю'],
-            [Declination::ACCUSATIVE, $wordWithoutEnding.'ю'],
-            [Declination::DATIVE, $wordWithoutEnding.'ю'],
-            [Declination::INSTRUMENTAL, $wordWithoutEnding.'ю'],
-            [Declination::PREPOSITIONAL, $wordWithoutEnding.'ю'],
+            [Declination::GENITIVE, $matches[1].'ю'],
+            [Declination::ACCUSATIVE, $matches[1].'ю'],
+            [Declination::DATIVE, $matches[1].'ю'],
+            [Declination::INSTRUMENTAL, $matches[1].'ю'],
+            [Declination::PREPOSITIONAL, $matches[1].'ю'],
         ]);
     }
 }

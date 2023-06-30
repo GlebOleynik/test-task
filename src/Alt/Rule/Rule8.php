@@ -24,13 +24,12 @@ final readonly class Rule8 implements Rule
         return Type::cases();
     }
 
-    public function supportsWord(string $word): bool
+    public function tryDecline(string $word): ?DeclinedWord
     {
-        return str_ends_with($word, self::ENDING);
-    }
+        if (!str_ends_with($word, self::ENDING)) {
+            return null;
+        }
 
-    public function decline(string $word): DeclinedWord
-    {
         $wordWithoutEnding = mb_substr($word, 0, -1);
 
         return DeclinedWord::fromPairs([

@@ -37,8 +37,10 @@ final readonly class WordDecliner
     public function declineWord(Word $word): DeclinedWord
     {
         foreach ($this->rulesByGenderByType[$word->gender->name][$word->type->name] ?? [] as $rule) {
-            if ($rule->supportsWord($word->word)) {
-                return $rule->decline($word->word);
+            $declinedWord = $rule->tryDecline($word->word);
+
+            if ($declinedWord !== null) {
+                return $declinedWord;
             }
         }
 

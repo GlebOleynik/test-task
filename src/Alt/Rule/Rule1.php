@@ -25,19 +25,14 @@ final readonly class Rule1 implements Rule
         return [Type::SURNAME];
     }
 
-    public function supportsWord(string $word): bool
+    public function tryDecline(string $word): ?DeclinedWord
     {
         foreach (self::ENDINGS as $ending) {
             if (str_ends_with($word, $ending)) {
-                return true;
+                return DeclinedWord::fromSingleWord($word);
             }
         }
 
-        return false;
-    }
-
-    public function decline(string $word): DeclinedWord
-    {
-        return DeclinedWord::fromSingleWord($word);
+        return null;
     }
 }

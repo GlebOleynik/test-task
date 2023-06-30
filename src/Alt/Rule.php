@@ -19,10 +19,5 @@ interface Rule
     /**
      * @param non-empty-string $word
      */
-    public function supportsWord(string $word): bool;
-
-    /**
-     * @param non-empty-string $word
-     */
-    public function decline(string $word): DeclinedWord;
+    public function tryDecline(string $word): ?DeclinedWord;
 }
