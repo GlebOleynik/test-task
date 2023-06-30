@@ -4,11 +4,25 @@ declare(strict_types=1);
 
 namespace Goleynik\WordsDeclension\Alt;
 
-use Goleynik\WordsDeclension\Alt\Word;
-
 interface Rule
 {
-    public function supports(Word $word): bool;
+    /**
+     * @return non-empty-list<Gender>
+     */
+    public function supportedGenders(): array;
 
-    public function decline(Word $word): DeclinedWord;
+    /**
+     * @return non-empty-list<Type>
+     */
+    public function supportedTypes(): array;
+
+    /**
+     * @param non-empty-string $word
+     */
+    public function supportsWord(string $word): bool;
+
+    /**
+     * @param non-empty-string $word
+     */
+    public function decline(string $word): DeclinedWord;
 }

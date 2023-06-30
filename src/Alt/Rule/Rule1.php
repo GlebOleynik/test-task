@@ -15,14 +15,20 @@ final readonly class Rule1 implements Rule
 {
     public const ENDINGS = [...Letters::CONSONANTS, 'ь'];
 
-    public function supports(Word $word): bool
+    public function supportedGenders(): array
     {
-        if (!($word->genderIs(Gender::FEMALE) && $word->typeIs(Type::SURNAME))) {
-            return false;
-        }
+        return [Gender::FEMALE];
+    }
 
+    public function supportedTypes(): array
+    {
+        return [Type::SURNAME];
+    }
+
+    public function supportsWord(string $word): bool
+    {
         foreach (self::ENDINGS as $ending) {
-            if (str_ends_with($word->word, $ending)) {
+            if (str_ends_with($word, $ending)) {
                 return true;
             }
         }
@@ -30,8 +36,8 @@ final readonly class Rule1 implements Rule
         return false;
     }
 
-    public function decline(Word $word): DeclinedWord
+    public function decline(string $word): DeclinedWord
     {
-        return DeclinedWord::fromSingleWord($word->word);
+        return DeclinedWord::fromSingleWord($word);
     }
 }

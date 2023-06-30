@@ -10,31 +10,33 @@ use Goleynik\WordsDeclension\Alt\Rule;
 use Goleynik\WordsDeclension\Alt\Gender;
 use Goleynik\WordsDeclension\Refference\Letters;
 use Goleynik\WordsDeclension\Alt\Type;
-use Goleynik\WordsDeclension\Alt\Word;
 
 final readonly class Rule17 implements Rule
 {
     public const ENDING = 'а';
 
-    public function supports(Word $word): bool
+    public function supportedGenders(): array
     {
-        if (!($word->genderIs(Gender::MALE) || $word->typeIs(Type::NAME))) {
-            return false;
-        }
-
-        if ($word->word[-1] !== self::ENDING) {
-            return false;
-        }
-
-        return in_array($word->word[-2] ?? '', Letters::CONSONANTS, true);
+        return [Gender::MALE];
     }
 
-    public function decline(Word $word): DeclinedWord
+    public function supportedTypes(): array
     {
-        $wordWithoutEnding = mb_substr($word->word, 0, -1);
+        return [Type::NAME];
+    }
+
+    public function supportsWord(string $word): bool
+    {
+        return $word[-1] === self::ENDING
+            && in_array($word[-2] ?? '', Letters::CONSONANTS, true);
+    }
+
+    public function decline(string $word): DeclinedWord
+    {
+        $wordWithoutEnding = mb_substr($word, 0, -1);
 
         return DeclinedWord::fromPairs([
-            [Declination::NOMINATIVE, $word->word],
+            [Declination::NOMINATIVE, $word],
             [Declination::GENITIVE, $wordWithoutEnding.'ю'],
             [Declination::ACCUSATIVE, $wordWithoutEnding.'ю'],
             [Declination::DATIVE, $wordWithoutEnding.'ю'],

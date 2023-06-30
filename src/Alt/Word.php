@@ -10,8 +10,8 @@ final readonly class Word
      * @param non-empty-string $word
      */
     public function __construct(
-        private Gender $gender,
-        private Type $type,
+        public Gender $gender,
+        public Type $type,
         public string $word,
     ) {
     }
